@@ -30,28 +30,34 @@ function ListPage(props) {
   }, [])
 
   return (
-    <Container>
+    <>
       {/* <ResetStyle />
       <GlobalStyle /> */}
+      <Container>
+        <AddForm addData={setTodos} todos={todos} />
+      </Container>
 
-      <AddForm addData={setTodos} todos={todos} />
+      <div className='bb mb-16' />
 
-      <ul>
-        {
-            todos.map((item, index, array) => {
-              return (
-                <>
-                  <List todo={item} todos={array} deleteData={setTodos} />
-                </>
-              )
-            })
-        }
-      </ul>
+      <Container>
+        <ul>
+          {
+              todos.map((item, index, array) => {
+                return (
+                  <>
+                    <List todo={item} todos={array} deleteData={setTodos} />
+                  </>
+                )
+              })
+          }
+        </ul>
 
-      <button>
-        <Link to="/home">返回首頁</Link>
-      </button>
-    </Container>
+        <button>
+          <Link to="/home">返回首頁</Link>
+        </button>
+      </Container>
+
+    </>
   )
 }
 

@@ -9,10 +9,8 @@ import "./list.scss";
 import db from "../firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore"; 
 
-const Container = styledComponents.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  text-align: center;
+const BgColor = styledComponents.div`
+    background-color: #bfb5af;
 `
 
 function AddForm() {
@@ -33,7 +31,7 @@ function AddForm() {
         setInput('');
     }
     return (
-        <form className='p-32 bb mb-16'>
+        <form className='pt-32 pb-32'>
             <input 
                 className='mr-16'
                 placeholder='' 
@@ -48,6 +46,7 @@ function AddForm() {
                 新增紀錄
             </button>
         </form>
+
     )
 }
 
