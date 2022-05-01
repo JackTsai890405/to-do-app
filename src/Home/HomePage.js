@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 
 import styledComponents from 'styled-components'
 import { ResetStyle, GlobalStyle } from '../reset'
@@ -7,6 +7,8 @@ import "../customCssReset.scss"
 import Header from './Header';
 import Banner from './Banner';
 import Button from './Button';
+
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const Container = styledComponents.div`
   max-width: 1200px;
@@ -25,6 +27,25 @@ const BannerColor = styledComponents.div`
 `
 
 function HomePage() {
+  const [uid, setUid] = useState('');
+
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https:firebase.google.com/docs/reference/js/firebase.User
+        const uid = user.uid;
+        // ...
+        setUid(uid)
+      } else {
+        // User is signed out
+        // ...
+        console.log('User is signed out');
+      }
+    });
+  }, [])
+
   return (
     <>
       {/* <ResetStyle />
@@ -42,7 +63,7 @@ function HomePage() {
       </BannerColor>
       
       <Container>
-        <Button />
+        <Button uid={uid} />
       </Container>
     </>
   )

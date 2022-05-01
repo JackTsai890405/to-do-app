@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import styledComponents from 'styled-components'
-import { ResetStyle, GlobalStyle } from '../reset'
+
 import "../customCssReset.scss"
 import "./list.scss";
 
@@ -10,7 +10,7 @@ import AddForm from './AddForm';
 import List from "./List";
 
 import db from "../firebase";
-import { collection, query, onSnapshot, orderBy } from "firebase/firestore"; 
+import { collection, query, onSnapshot, orderBy, where } from "firebase/firestore"; 
 
 const Container = styledComponents.div`
   max-width: 1200px;
@@ -18,12 +18,15 @@ const Container = styledComponents.div`
   text-align: center;
 `
 
-function ListPage(props) {
+function ListPage() {
   const [todos, setTodos] = useState([]);
 
+  const location = useLocation();
+  const {uid} = location.state;
 
+  // , where('uid', '==', 'Andy0405')
   useEffect(()=> {
-    const q = query(collection(db, "todos"), orderBy("timestamp", "desc"));
+    const q = query(collection(db, "todos"), where('uid', '==', uid), orderBy("timestamp", "desc"));
     onSnapshot(q, (querySnapshot) => {
       setTodos(querySnapshot.docs.map(doc => ({id: doc.id, todo: doc.data().todo})))
     });
@@ -34,7 +37,7 @@ function ListPage(props) {
       {/* <ResetStyle />
       <GlobalStyle /> */}
       <Container>
-        <AddForm addData={setTodos} todos={todos} />
+        <AddForm addData={setTodos} todos={todos} uid={uid} />
       </Container>
 
       <div className='bb mb-16' />
@@ -45,7 +48,7 @@ function ListPage(props) {
               todos.map((item, index, array) => {
                 return (
                   <>
-                    <List todo={item} todos={array} deleteData={setTodos} />
+                    <List key={item.id} todo={item} todos={array} deleteData={setTodos} />
                   </>
                 )
               })

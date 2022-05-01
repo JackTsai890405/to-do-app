@@ -1,30 +1,28 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import { Link } from "react-router-dom";
 import db from '../firebase';
-import { doc, deleteDoc, updateDoc, serverTimestamp } from "firebase/firestore";
+import { doc, deleteDoc } from "firebase/firestore";
 import "./list.scss";
 
-function List({todo, todos, deleteData}) {
+function List({todo, deleteData}) {
+
   function deleteTodo(event) {
     event.preventDefault();
-    // 沒有資料庫時的操作方法
-    // let filterData = todos.filter(item => (
-    //   item.id !== todo.id
-    // ))
-    // deleteData(filterData)
-    // 有資料庫時的操作方法
+
     const todoRef = doc(db, "todos", todo.id);
     deleteDoc(todoRef)
       .then(() => {
         console.log(`刪除成功 : ${todo.id} & ${todo.todo}`);
       })
-  }
 
+    deleteData(function (prev) {
+      return prev.filter(item => item.id !== todo.id);
+    })
+  }
 
   return (
     <>
         <li 
-          key={todo.id}
           className="d-flex mb-16"
         >
           {todo.todo}
